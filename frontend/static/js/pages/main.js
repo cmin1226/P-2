@@ -3,8 +3,10 @@ export default class{
         document.title = "main";
     }
     async getHtml(){
-        return 
-            "<h1>This is Home Page</h1>";
+        return `
+            <h1>This is Home Page</h1>
+        `;
     }
 }
+
 

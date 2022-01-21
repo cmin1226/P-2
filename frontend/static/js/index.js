@@ -28,7 +28,7 @@ const router = async () => {
     }
 };
 
-document.addEventListener("popstate", ()=>{
+window.addEventListener("popstate", ()=>{
     router();
 });
 
@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.target.matches("[data-link]")){
             e.preventDefault();
             history.pushState(null, null, e.target.href);
+            router();
         }
     });
     router();
