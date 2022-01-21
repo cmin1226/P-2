@@ -4,22 +4,33 @@ import login from "./pages/login.js";
 const router = async () => {
     const routes = [
         { path: "/", view: main},
-        { path: "/login", view: login}
+        { path: "/login", view: login},
     ];
-    const page = new match.route.view();
 
-    document.querySelector("#root").innerHTML = await page.getHtml();
+    const pageMatches = routes.map((route) => {
+        return{
+            route,
+            isMatch: route.path === location.pathname,
+        };
+    });
+    let match = pageMatches.find((pageMatch) => pageMatch.isMatch);
+
+    if (!match) {
+        match = {
+            route: location.pathname,
+            ismatch:true,
+        };
+        const page = new NotFound();
+        document.querySelector("#root").innerHTML = await page.getHtml();
+    }else {
+        const page = new match.route.view();
+        document.querySelector("#root").innerHTML = await page.getHtml();
+    }
 };
 
-const pageMatches = routes.map((route)=>{
-    return{
-        route,
-        isMatch: route.path === location.pathname,
-    };
+document.addEventListener("popstate", ()=>{
+    router();
 });
-
-let match = pageMatches.find((pageMatch) => pageMatch.isMatch);
-console.log(match.route.view());
 
 document.addEventListener("DOMContentLoaded", () => {
     document.body.addEventListener("click", (e) => {
@@ -28,9 +39,5 @@ document.addEventListener("DOMContentLoaded", () => {
             history.pushState(null, null, e.target.href);
         }
     });
-    router();
-});
-
-window.addEventListener("popstate", () => {
     router();
 });
